@@ -2,6 +2,21 @@
 
 Rescaffold is a project scaffolding generator and migration tool. Unlike other tools which can only create a template once, rescaffold can update scaffolding in-place without mangling any of your code.
 
+## Status
+
+- [x] Initial template generation
+- [x] Interactive variable setting
+- [x] Loading scaffolds from a local directory
+- [x] Scaffold lockfile
+- [x] Scaffold checksums and conflict detection on first generation
+- [x] Basic template modifiers (only one per variable instance in a template)
+- [ ] Scaffold upgrades
+- [ ] Scaffold removal
+- [ ] Auto-clone scaffold sources from git
+- [ ] Composable modifiers
+- [ ] Method of fixing conflicts (interactively or not)
+
+
 ## Usage
 
 From the root directory of a new or existing project, run
@@ -37,6 +52,29 @@ This means you can develop scaffolds without going through a git remote, and als
 
 If `.rescaffold.toml` gets deleted, rescaffold will need to be run interactively to resolve any conflicts that arise, and any files that need to be updated will have to be checked manually.
 
+Here's an example of `.rescaffold.toml` created when generating using the scaffold in `example/`:
+
+```toml
+[scaffolds]
+[scaffolds.example]
+source = "example"
+
+[[scaffolds.example.file]]
+path = "ext/go.mod"
+checksum = "5dc2e5fcdd34653232d8b2efbfa1c050c49f9002cae1b6093ad2f53d8af8b4c9"
+
+[[scaffolds.example.file]]
+path = "ext/web/index.html"
+checksum = "dd0a2bb1d85c01a876d5e766af7f7bd714c637527776ee7b93f3dcd6e6497945"
+
+[[scaffolds.example.file]]
+path = "ext/foo.go"
+checksum = "b5399904673d9c9209f54163c9625d90ff02c16e886c0066e1eff0401683cae5"
+[scaffolds.example.vars]
+name = "foo"
+port = "8000"
+```
+
 ## Creating Scaffolds
 
 Scaffolds are directories with a `.rescaffold-manifest.toml` file at the root. They can be stored in a VCS, like git, or live as a directory on your local filesystem. The manifest file looks like:
@@ -47,6 +85,7 @@ rescaffold_version = "0"
 [meta]
 title = "Example Scaffold"
 author = "Firstname Lastname <me@example.com>"
+description = "An example scaffold"
 
 [config]
 open_delim = "_"
@@ -108,6 +147,3 @@ Replacement substrings can also contain modifiers, such as `_name|titleCase_`. T
 * `titleCase`: "some string" -> "Some String"
 * `lowerCase`: "Foo" -> "foo"
 * `upperCase`: "Foo" -> "FOO"
-* `camelCase`: "foo_bar" -> "fooBar"
-* `pascalCase`: "foo_bar" -> "FooBar"
-* `snakeCase`: "fooBar" -> "foo_bar"

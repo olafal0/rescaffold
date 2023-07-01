@@ -8,6 +8,10 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+const (
+	ManifestFilename = ".rescaffold-manifest.toml"
+)
+
 type Manifest struct {
 	Meta struct {
 		Title       string `toml:"title"`

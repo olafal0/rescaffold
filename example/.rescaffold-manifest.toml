@@ -1,0 +1,18 @@
+[meta]
+title = "Example Scaffold"
+description = "An example scaffold that includes a webpage and a file server for it"
+author = "me"
+
+[config]
+open_delim = "x_"
+close_delim = "_"
+modifier_delim = "|"
+
+[vars.name]
+type = "string"
+description = "A short, descriptive name for your project"
+
+[vars.port]
+type = "string"
+description = "Port to listen on"
+default = "8000"

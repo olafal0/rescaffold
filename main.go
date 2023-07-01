@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -52,23 +51,19 @@ func main() {
 		return
 	}
 
-	ctx := context.Background()
-	ctx = config.WithOutputDir(ctx, outputDir)
-
 	lockfilePath := path.Join(outputDir, config.LockfileFilename)
 	lockfile, err := config.LoadLockfile(lockfilePath)
 	if err != nil {
 		log.Fatal(fmt.Errorf("could not load lockfile: %w", err))
 	}
-	ctx = config.WithLockfile(ctx, lockfile)
 
 	switch {
 	case shouldUpgrade:
-		err = UpgradeScaffolds(ctx, scaffolds)
+		err = UpgradeScaffolds(lockfile, scaffolds, outputDir)
 	case shouldRemove:
-		err = RemoveScaffolds(ctx, scaffolds)
+		err = RemoveScaffolds(lockfile, scaffolds, outputDir)
 	default:
-		err = GenerateScaffolds(ctx, scaffolds)
+		err = GenerateScaffolds(lockfile, scaffolds, outputDir)
 	}
 	if err != nil {
 		if lockfile.IsNewlyCreated() {
@@ -78,23 +73,23 @@ func main() {
 	}
 }
 
-func UpgradeScaffolds(_ context.Context, scaffolds []string) error {
+func UpgradeScaffolds(lockfile *config.Lockfile, scaffolds []string, outdir string) error {
 	return errors.New("upgrade not yet implemented")
 }
 
-func RemoveScaffolds(_ context.Context, scaffolds []string) error {
+func RemoveScaffolds(_ *config.Lockfile, scaffolds []string, _ string) error {
 	if len(scaffolds) == 0 {
 		return fmt.Errorf("will not remove all scaffolds without specifying them explicitly")
 	}
 	return errors.New("remove not yet implemented")
 }
 
-func GenerateScaffolds(ctx context.Context, scaffolds []string) error {
+func GenerateScaffolds(lockfile *config.Lockfile, scaffolds []string, outdir string) error {
 	if len(scaffolds) == 0 {
 		return fmt.Errorf("cannot generate scaffolds if none are specified. to upgrade, use the -upgrade flag")
 	}
 	for _, s := range scaffolds {
-		err := scaffold.Generate(ctx, path.Clean(s))
+		err := scaffold.Generate(lockfile, path.Clean(s), outdir)
 		if err != nil {
 			return err
 		}

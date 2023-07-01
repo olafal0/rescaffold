@@ -25,12 +25,14 @@ type Manifest struct {
 		ModifierDelim string `toml:"modifier_delim"`
 	} `toml:"config"`
 
-	Vars map[string]struct {
-		Type        string   `toml:"type"`
-		Description string   `toml:"description"`
-		EnumValues  []string `toml:"enum_values"`
-		Default     string   `toml:"default"`
-	} `toml:"vars"`
+	Vars map[string]*ManifestVar `toml:"vars"`
+}
+
+type ManifestVar struct {
+	Type        string   `toml:"type"`
+	Description string   `toml:"description"`
+	EnumValues  []string `toml:"enum_values"`
+	Default     string   `toml:"default"`
 }
 
 func ParseManifest(data io.Reader) (*Manifest, error) {

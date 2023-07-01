@@ -2,7 +2,6 @@ package scaffold
 
 import (
 	"errors"
-	"io"
 	"os"
 	"path"
 	"strings"
@@ -11,8 +10,10 @@ import (
 )
 
 type ScaffoldFile struct {
-	Path     string
-	Contents io.ReadCloser
+	// RelativePath is the file path relative to the root of the scaffold directory
+	RelativePath string
+	// FullPath is the absolute path to the file
+	FullPath string
 }
 
 type Scaffold struct {
@@ -22,21 +23,27 @@ type Scaffold struct {
 }
 
 func LoadFromDir(dirName string) (*Scaffold, error) {
-	files, err := walkDir("", dirName)
+	filenames, err := walkDir("", dirName)
+	if err != nil {
+		return nil, err
+	}
+
+	wd, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
 
 	scaffold := &Scaffold{}
-	scaffold.Files = make([]ScaffoldFile, 0, len(files))
-	for _, file := range files {
-		// Open file for reading
-		f, err := os.Open(file)
-		if err != nil {
-			return nil, err
-		}
+	scaffold.Files = make([]ScaffoldFile, 0, len(filenames))
+	for _, filename := range filenames {
+		if path.Base(filename) == config.ManifestFilename {
+			// Read and load manifest file
+			f, err := os.Open(filename)
+			if err != nil {
+				return nil, err
+			}
+			defer f.Close()
 
-		if path.Base(file) == config.ManifestFilename {
 			manifest, err := config.ParseManifest(f)
 			if err != nil {
 				return nil, err
@@ -47,8 +54,8 @@ func LoadFromDir(dirName string) (*Scaffold, error) {
 		}
 
 		scaffold.Files = append(scaffold.Files, ScaffoldFile{
-			Path:     path.Clean(strings.TrimPrefix(file, dirName)),
-			Contents: f,
+			RelativePath: path.Clean(strings.TrimPrefix(filename, dirName)),
+			FullPath:     path.Join(wd, filename),
 		})
 	}
 
@@ -56,18 +63,6 @@ func LoadFromDir(dirName string) (*Scaffold, error) {
 		return nil, errors.New("scaffold directory does not contain a manifest file")
 	}
 	return scaffold, nil
-}
-
-func (s *Scaffold) Close() error {
-	if s == nil {
-		return nil
-	}
-	for _, file := range s.Files {
-		if err := file.Contents.Close(); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func walkDir(basePath, dir string) ([]string, error) {

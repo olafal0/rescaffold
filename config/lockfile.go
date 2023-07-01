@@ -88,7 +88,9 @@ func (l *Lockfile) WriteUpdated() error {
 	// Write lockfile to buffer so that, in the event of an encoding error, the
 	// lockfile is not truncated
 	buf := &bytes.Buffer{}
-	err := toml.NewEncoder(buf).Encode(l)
+	enc := toml.NewEncoder(buf)
+	enc.Indent = ""
+	err := enc.Encode(l)
 	if err != nil {
 		return fmt.Errorf("failed to encode lockfile for update: %w", err)
 	}

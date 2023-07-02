@@ -9,6 +9,7 @@ import (
 
 	"github.com/olafal0/rescaffold/config"
 	"github.com/olafal0/rescaffold/scaffold"
+	"github.com/olafal0/rescaffold/set"
 )
 
 type Action int
@@ -74,7 +75,16 @@ func main() {
 }
 
 func UpgradeScaffolds(lockfile *config.Lockfile, scaffolds []string, outdir string) error {
-	return errors.New("upgrade not yet implemented")
+	if len(scaffolds) == 0 {
+		scaffolds = set.Keys(lockfile.Scaffolds)
+	}
+	for _, s := range scaffolds {
+		err := scaffold.Upgrade(lockfile, path.Clean(s), outdir)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func RemoveScaffolds(_ *config.Lockfile, scaffolds []string, _ string) error {

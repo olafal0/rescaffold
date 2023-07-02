@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/olafal0/rescaffold/config"
+	"github.com/olafal0/rescaffold/set"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -50,9 +51,9 @@ func RegexpReplacer(manifest *config.Manifest, vars map[string]string) (func(str
 	// Example: "x_(name|port)((?:\|(?:titlecase|lowercase))*)_"
 	regexpStr := fmt.Sprintf(`%[1]s(%[2]s)((?:%[3]s(?:%[4]s))*)%[5]s`,
 		openDelim,
-		strings.Join(keys(vars), "|"),
+		strings.Join(set.Keys(vars), "|"),
 		modifierDelim,
-		strings.Join(keys(Modifiers), "|"),
+		strings.Join(set.Keys(Modifiers), "|"),
 		closeDelim,
 	)
 	matcher, err := regexp.Compile(regexpStr)
@@ -117,9 +118,9 @@ func RegexpLoopReplacer(manifest *config.Manifest, vars map[string]string) (func
 	// Example: "x_(name|port)((?:\|(?:titlecase|lowercase))*)_"
 	regexpStr := fmt.Sprintf(`%[1]s(%[2]s)((?:%[3]s(?:%[4]s))*)%[5]s`,
 		openDelim,
-		strings.Join(keys(vars), "|"),
+		strings.Join(set.Keys(vars), "|"),
 		modifierDelim,
-		strings.Join(keys(Modifiers), "|"),
+		strings.Join(set.Keys(Modifiers), "|"),
 		closeDelim,
 	)
 	matcher, err := regexp.Compile(regexpStr)
@@ -168,12 +169,4 @@ func RegexpLoopReplacer(manifest *config.Manifest, vars map[string]string) (func
 		}
 		return s
 	}, nil
-}
-
-func keys[T comparable, T2 any](m map[T]T2) []T {
-	keys := make([]T, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	return keys
 }

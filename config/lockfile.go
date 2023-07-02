@@ -159,6 +159,15 @@ func (ls *LockfileScaffold) SetFile(path, checksum string) *LockfileScaffoldFile
 	return lockedFile
 }
 
+func (ls *LockfileScaffold) RemoveFile(path string) {
+	for i, f := range ls.Files {
+		if f.Path == path {
+			ls.Files = append(ls.Files[:i], ls.Files[i+1:]...)
+			return
+		}
+	}
+}
+
 func defaultLockfile() *Lockfile {
 	return &Lockfile{
 		Scaffolds: map[string]*LockfileScaffold{},

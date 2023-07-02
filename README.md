@@ -6,12 +6,13 @@ Rescaffold is a project scaffolding generator and migration tool. Unlike other t
 
 - [x] Initial template generation
 - [x] Interactive variable setting
+- [ ] Escape sequences
 - [x] Loading scaffolds from a local directory
 - [x] Scaffold lockfile
 - [x] Scaffold checksums and conflict detection on first generation
 - [x] Basic template modifiers (only one per variable instance in a template)
 - [x] Scaffold upgrades
-- [ ] Scaffold removal
+- [x] Scaffold removal
 - [ ] Auto-clone scaffold sources from git
 - [x] Composable modifiers
 - [ ] Method of fixing conflicts (interactively or not)

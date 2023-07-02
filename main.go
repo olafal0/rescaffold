@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -87,11 +86,17 @@ func UpgradeScaffolds(lockfile *config.Lockfile, scaffolds []string, outdir stri
 	return nil
 }
 
-func RemoveScaffolds(_ *config.Lockfile, scaffolds []string, _ string) error {
+func RemoveScaffolds(lockfile *config.Lockfile, scaffolds []string, outdir string) error {
 	if len(scaffolds) == 0 {
 		return fmt.Errorf("will not remove all scaffolds without specifying them explicitly")
 	}
-	return errors.New("remove not yet implemented")
+	for _, s := range scaffolds {
+		err := scaffold.Remove(lockfile, path.Clean(s), outdir)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func GenerateScaffolds(lockfile *config.Lockfile, scaffolds []string, outdir string) error {

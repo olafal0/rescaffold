@@ -64,6 +64,11 @@ func CreateLockfile(filename string) (*Lockfile, error) {
 	if err := os.MkdirAll(path.Dir(filename), 0755); err != nil {
 		return nil, err
 	}
+	// Check for manifest file in the same directory, and fail if one is present
+	_, err := os.Open(path.Join(path.Dir(filename), ManifestFilename))
+	if !os.IsNotExist(err) {
+		return nil, fmt.Errorf("cannot create lockfile in %s, manifest file exists", path.Dir(filename))
+	}
 	f, err := os.Create(filename)
 	if err != nil {
 		return nil, err
@@ -130,6 +135,10 @@ func (l *Lockfile) GetScaffold(name, source string, manifest *Manifest) *Lockfil
 	}
 	l.Scaffolds[name] = newLS
 	return newLS
+}
+
+func (l *Lockfile) RemoveScaffold(name string) {
+	delete(l.Scaffolds, name)
 }
 
 // GetFile returns the lockfile information for a file. If the file does not

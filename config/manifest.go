@@ -13,19 +13,17 @@ const (
 )
 
 type Manifest struct {
-	Meta struct {
-		Title       string `toml:"title"`
-		Author      string `toml:"author"`
-		Description string `toml:"description"`
-	} `toml:"meta"`
+	Meta *ManifestMeta `toml:"meta"`
 
-	Config struct {
-		OpenDelim     string `toml:"open_delim"`
-		CloseDelim    string `toml:"close_delim"`
-		ModifierDelim string `toml:"modifier_delim"`
-	} `toml:"config"`
+	Config *ManifestConfig `toml:"config"`
 
 	Vars map[string]*ManifestVar `toml:"vars"`
+}
+
+type ManifestMeta struct {
+	Title       string `toml:"title"`
+	Author      string `toml:"author"`
+	Description string `toml:"description"`
 }
 
 type ManifestVar struct {
@@ -33,6 +31,12 @@ type ManifestVar struct {
 	Description string   `toml:"description"`
 	EnumValues  []string `toml:"enum_values"`
 	Default     string   `toml:"default"`
+}
+
+type ManifestConfig struct {
+	OpenDelim     string `toml:"open_delim"`
+	CloseDelim    string `toml:"close_delim"`
+	ModifierDelim string `toml:"modifier_delim"`
 }
 
 func ParseManifest(data io.Reader) (*Manifest, error) {

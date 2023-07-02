@@ -13,7 +13,7 @@ Rescaffold is a project scaffolding generator and migration tool. Unlike other t
 - [ ] Scaffold upgrades
 - [ ] Scaffold removal
 - [ ] Auto-clone scaffold sources from git
-- [ ] Composable modifiers
+- [x] Composable modifiers
 - [ ] Method of fixing conflicts (interactively or not)
 
 

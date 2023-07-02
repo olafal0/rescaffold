@@ -31,7 +31,10 @@ func Generate(lockfile *config.Lockfile, scaffoldSource, outdir string) error {
 	}
 	lockedScaffold.Vars = varValues
 
-	replacer := Replacer(scaf.Manifest, varValues)
+	replacer, err := RegexpLoopReplacer(scaf.Manifest, varValues)
+	if err != nil {
+		return err
+	}
 
 	for _, scaffoldFile := range scaf.Files {
 		outFilename := replacer(scaffoldFile.RelativePath)

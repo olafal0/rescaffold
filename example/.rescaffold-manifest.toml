@@ -11,6 +11,7 @@ modifier_delim = "|"
 [vars.name]
 type = "string"
 description = "A short, descriptive name for your project"
+default = "foobar"
 
 [vars.port]
 type = "string"

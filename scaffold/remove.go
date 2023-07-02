@@ -128,6 +128,9 @@ func removeEmptyDirectories(basePath, dir string) (removed bool, err error) {
 		}
 	}
 
+	if basePath == "" {
+		return false, nil
+	}
 	if !encounteredNonDir {
 		return true, os.Remove(path.Join(basePath, dir))
 	}

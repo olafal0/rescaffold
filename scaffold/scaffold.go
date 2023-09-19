@@ -53,12 +53,16 @@ func LoadFromDir(dirName string) (*Scaffold, error) {
 			continue
 		}
 
-		scaffold.Files = append(scaffold.Files, ScaffoldFile{
+		scafFile := ScaffoldFile{
 			RelativePath: path.Clean(strings.TrimPrefix(filename, dirName)),
-			FullPath:     path.Join(wd, filename),
-		})
+		}
+		if path.IsAbs(filename) {
+			scafFile.FullPath = filename
+		} else {
+			scafFile.FullPath = path.Join(wd, filename)
+		}
+		scaffold.Files = append(scaffold.Files, scafFile)
 	}
-
 	if scaffold.Manifest == nil {
 		return nil, errors.New("scaffold directory does not contain a manifest file")
 	}

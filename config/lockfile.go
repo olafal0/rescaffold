@@ -122,8 +122,8 @@ func (l *Lockfile) Remove() error {
 
 // GetScaffold returns the lockfile information for a scaffold, initializing it
 // if it doesn't exist
-func (l *Lockfile) GetScaffold(name, source string, manifest *Manifest) *LockfileScaffold {
-	ls, ok := l.Scaffolds[name]
+func (l *Lockfile) GetScaffold(source string, manifest *Manifest) *LockfileScaffold {
+	ls, ok := l.Scaffolds[source]
 	if ok {
 		return ls
 	}
@@ -133,12 +133,12 @@ func (l *Lockfile) GetScaffold(name, source string, manifest *Manifest) *Lockfil
 		Files:  []*LockfileScaffoldFile{},
 		Vars:   map[string]string{},
 	}
-	l.Scaffolds[name] = newLS
+	l.Scaffolds[source] = newLS
 	return newLS
 }
 
-func (l *Lockfile) RemoveScaffold(name string) {
-	delete(l.Scaffolds, name)
+func (l *Lockfile) RemoveScaffold(source string) {
+	delete(l.Scaffolds, source)
 }
 
 // GetFile returns the lockfile information for a file. If the file does not

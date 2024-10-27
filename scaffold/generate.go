@@ -13,15 +13,13 @@ import (
 )
 
 func Generate(lockfile *config.Lockfile, scaffoldSource, outdir string) error {
-	// TODO: load scaffold from git or whatever if name is a URL
-	// For now, assume source == name == local directory
-	scaffoldDir := scaffoldSource
-	scaf, err := LoadFromDir(scaffoldDir)
+	scaf, err := LoadScaffold(scaffoldSource)
 	if err != nil {
 		return err
 	}
+	defer scaf.Cleanup()
 
-	lockedScaffold := lockfile.GetScaffold(scaffoldDir, scaffoldSource, scaf.Manifest)
+	lockedScaffold := lockfile.GetScaffold(scaffoldSource, scaf.Manifest)
 
 	// Find all vars in the manifest
 	// If any do not have values in the lockfile, prompt the user for them

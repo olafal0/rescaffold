@@ -10,15 +10,13 @@ import (
 )
 
 func Upgrade(lockfile *config.Lockfile, scaffoldSource, outdir string) error {
-	// TODO: load scaffold from git or whatever if name is a URL
-	// For now, assume source == name == local directory
-	scaffoldDir := scaffoldSource
-	scaf, err := LoadFromDir(scaffoldDir)
+	scaf, err := LoadScaffold(scaffoldSource)
 	if err != nil {
 		return err
 	}
+	defer scaf.Cleanup()
 
-	lockedScaffold := lockfile.GetScaffold(scaffoldDir, scaffoldSource, scaf.Manifest)
+	lockedScaffold := lockfile.GetScaffold(scaffoldSource, scaf.Manifest)
 
 	// Create a set of output filenames that are present in the lockfile
 	lockedFilePaths := set.NewWithCap[string](len(lockedScaffold.Files))

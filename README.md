@@ -13,7 +13,8 @@ Rescaffold is a project scaffolding generator and migration tool. Unlike other t
 - [x] Basic template modifiers (only one per variable instance in a template)
 - [x] Scaffold upgrades
 - [x] Scaffold removal
-- [ ] Auto-clone scaffold sources from git
+- [x] Auto-clone scaffold sources from git
+- [ ] Version tracking of git sources
 - [x] Composable modifiers
 - [ ] Method of fixing conflicts (interactively or not)
 
@@ -36,8 +37,6 @@ or
 You can add as many scaffolds as you want, simply by repeating the initial command. If you want to remove a scaffold (which only removes files created by rescaffold and are since untouched), you can run:
 
 `rescaffold -remove <git-template-url>`
-
-Commands can specify a full URL to operate on a specific scaffold, but scaffolds can also be specified by the project slug. I.e. `git@github.com:user-name/my-scaffold.git` can be specified, or you can simply write "my-scaffold". If there are multiple scaffolds named "my-scaffold", rescaffold will notify you with an error.
 
 Scaffolds can be:
 

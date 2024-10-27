@@ -24,6 +24,7 @@ type ManifestMeta struct {
 	Title       string `toml:"title"`
 	Author      string `toml:"author"`
 	Description string `toml:"description"`
+	PostInstall string `toml:"post_install"`
 }
 
 type ManifestVar struct {

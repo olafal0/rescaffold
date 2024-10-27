@@ -52,7 +52,8 @@ func Generate(lockfile *config.Lockfile, scaffoldSource, outdir string) error {
 		// If file exists, check that its contents are what we expect (matching checksum)
 		if existingOutfile != nil {
 			if lockedFile == nil {
-				return fmt.Errorf("file already exists but is not in lockfile: %s", outpath)
+				fmt.Printf("file already exists but is not in lockfile, skipping: %s\n", outpath)
+				continue
 			}
 
 			checksum, err := hashFile(existingOutfile)
@@ -95,6 +96,11 @@ func Generate(lockfile *config.Lockfile, scaffoldSource, outdir string) error {
 		if err := lockfile.WriteUpdated(); err != nil {
 			return fmt.Errorf("error writing updated lockfile: %w", err)
 		}
+	}
+
+	if scaf.Manifest.Meta.PostInstall != "" {
+		fmt.Println("Post-install instructions:")
+		fmt.Println(scaf.Manifest.Meta.PostInstall)
 	}
 	return nil
 }

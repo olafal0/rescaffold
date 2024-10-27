@@ -17,7 +17,6 @@ Rescaffold is a project scaffolding generator and migration tool. Unlike other t
 - [x] Composable modifiers
 - [ ] Method of fixing conflicts (interactively or not)
 
-
 ## Usage
 
 From the root directory of a new or existing project, run
@@ -42,8 +41,8 @@ Commands can specify a full URL to operate on a specific scaffold, but scaffolds
 
 Scaffolds can be:
 
-* URLs of git repositories
-* Relative or absolute paths to locally stored directories
+- URLs of git repositories
+- Relative or absolute paths to locally stored directories
 
 This means you can develop scaffolds without going through a git remote, and also that you can clone a repo yourself if your setup requires more than an unauthenticated `git clone`.
 
@@ -87,6 +86,7 @@ rescaffold_version = "0"
 title = "Example Scaffold"
 author = "Firstname Lastname <me@example.com>"
 description = "An example scaffold"
+post_install = "Some text instructions to print after generation"
 
 [config]
 open_delim = "_"
@@ -145,6 +145,6 @@ Delimiters, both opening and closing, are also optional. For example, you could 
 
 Replacement substrings can also contain modifiers, such as `_name|titleCase_`. These modifiers can change the var value before performing replacement. The modifiers that are available are:
 
-* `titleCase`: "some string" -> "Some String"
-* `lowerCase`: "Foo" -> "foo"
-* `upperCase`: "Foo" -> "FOO"
+- `titlecase`: "some string" -> "Some String"
+- `lowercase`: "Foo" -> "foo"
+- `uppercase`: "Foo" -> "FOO"

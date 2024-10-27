@@ -2,6 +2,7 @@
 title = "Example Scaffold"
 description = "An example scaffold that includes a webpage and a file server for it"
 author = "me"
+post_install = "Hope it works!"
 
 [config]
 open_delim = "x_"
